@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('conversion-form');
     const resultElement = document.getElementById('result');
+    const resetButton = document.getElementById('reset-button');
 
     form.addEventListener('submit', async (event) => {
         event.preventDefault();
@@ -13,5 +14,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = await response.json();
 
         resultElement.innerHTML = `Converted Amount: ${data.convertedAmount.toFixed(2)} ${targetCurrency}`;
+    }
+    );
+    resetButton.addEventListener('click', () => {
+        resetForm();
     });
+    function resetForm() {
+        form.reset(); // Clear form fields
+        resultElement.innerHTML = ''; // Clear the result display
+    }
 });
