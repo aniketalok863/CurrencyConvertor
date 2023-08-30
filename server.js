@@ -50,7 +50,26 @@ app.post('/logConversion', express.json(), async (req, res) => {
         res.status(500).json({ message: 'An error occurred while logging the conversion' });
     }
 });
+app.post('/updateLog',express.json(), async (req, res) => {
+    try {
+        const { editSourceCurrency, editSourceAmount, editTargetCurrency, convertedAmount, editLogId } = req.body;
 
+        // Update the database record using the provided data
+        const updateQuery = `
+            UPDATE conversion_logs
+            SET source_currency = $1, source_amount = $2, target_currency = $3, converted_amount = $4
+            WHERE id = $5
+        `;
+
+        const values = [editSourceCurrency, editSourceAmount, editTargetCurrency, convertedAmount, editLogId];
+        await pool.query(updateQuery, values);
+
+        res.status(200).json({ message: 'Data updated successfully' });
+    } catch (error) {
+        console.error('Error updating data:', error);
+        res.status(500).json({ message: 'An error occurred while updating data' });
+    }
+});
 // Fetch conversion history endpoint
 app.get('/getHistory', async (req, res) => {
     try {
